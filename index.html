@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Multi-Utility Dashboard</title>
+    <title>Premium Multi-Utility Dashboard & Time Zone Calculator</title>
     <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="https://cloudflare.com">
@@ -18,283 +18,143 @@
             --accent: #6366f1;
             --accent-hover: #4f46e5;
             --success: #10b981;
-            --danger: #ef4444;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            overflow-x: hidden;
-        }
+        header { background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid var(--panel-border); backdrop-filter: blur(12px); padding: 35px 20px; text-align: center; }
+        header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: var(--text-muted); font-size: 1rem; }
 
-        /* Layout Structure */
-        .sidebar {
-            width: 280px;
-            background: rgba(15, 23, 42, 0.6);
-            border-right: 1px solid var(--panel-border);
-            backdrop-filter: blur(12px);
-            display: flex;
-            flex-content: column;
-            flex-direction: column;
-            padding: 20px;
-            position: fixed;
-            height: 100vh;
-            z-index: 10;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--panel-border);
-            margin-bottom: 20px;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-menu {
-            list-style: none;
-            flex-grow: 1;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .nav-item {
-            padding: 12px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 6px;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .main-content {
-            margin-left: 280px;
-            flex-grow: 1;
-            padding: 40px;
-            max-width: 1200px;
-            width: calc(100% - 280px);
-        }
-
-        /* Utility Card Panels */
-        .tool-panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--panel-border);
-            border-radius: 16px;
-            padding: 32px;
-            backdrop-filter: blur(16px);
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; width: 100%; flex-grow: 1; }
+        
+        .card { 
+            background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 16px; 
+            padding: 25px; margin-bottom: 25px; backdrop-filter: blur(16px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-            display: none;
-            animation: fadeIn 0.4s ease forwards;
         }
 
-        .tool-panel.active {
-            display: block;
+        h2 { margin-bottom: 18px; font-size: 1.4rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 10px; }
+        label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; }
+        
+        select, input { 
+            width: 100%; padding: 12px 14px; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--panel-border); 
+            border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: border 0.2s;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h2 {
-            margin-bottom: 24px;
-            font-size: 1.75rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        /* Form Controls */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        input[type="text"], input[type="number"], input[type="date"], input[type="time"], select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--panel-border);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            outline: none;
-            transition: border 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent);
-        }
+        select:focus, input:focus { border-color: var(--accent); }
+        select option { background: #0f172a; color: #fff; }
 
         .btn {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            width: 100%;
+            background: var(--accent); color: #fff; border: none; padding: 12px 20px;
+            border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px;
         }
+        .btn:hover { background: var(--accent-hover); }
 
-        .btn:hover {
-            background: var(--accent-hover);
+        .result { margin-top: 20px; padding: 15px; background: rgba(15, 23, 42, 0.4); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; font-size: 1rem; color: #fff; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        
+        .clock-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
+        .clock { background: rgba(15, 23, 42, 0.4); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; text-align: center; }
+        .clock strong { display: block; font-size: 0.95rem; color: var(--text-muted); margin-bottom: 6px; }
+        .clock-time { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+
+        .tool-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
+        .tool { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            text-decoration: none; background: rgba(15, 23, 42, 0.4); border: 1px solid var(--panel-border); 
+            border-radius: 12px; padding: 20px 15px; color: var(--text-main); font-weight: 500; font-size: 0.9rem; transition: 0.2s;
         }
+        .tool:hover { background: var(--accent); transform: translateY(-2px); border-color: transparent; }
+        .tool i { font-size: 1.3rem; color: var(--text-muted); transition: 0.2s; }
+        .tool:hover i { color: #fff; }
 
-        /* Result Cards */
-        .result-box {
-            margin-top: 24px;
-            padding: 20px;
-            background: rgba(15, 23, 42, 0.4);
-            border-left: 4px solid var(--accent);
-            border-radius: 0 8px 8px 0;
-        }
+        .faq { margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
+        .faq h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; color: #fff; }
+        .faq p { color: var(--text-muted); font-size: 0.9rem; }
 
-        .result-title {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 6px;
-        }
-
-        .result-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        /* Native Ads Spaces Styles */
+        /* Sponsored Ads Zones */
         .ad-space {
-            background: rgba(15, 23, 42, 0.3);
-            border: 1px dashed rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            background: rgba(15, 23, 42, 0.3); border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin: 15px 0;
         }
+        .ad-space::before { content: 'Sponsored Advertisement Space'; opacity: 0.5; }
+        .top-ad { height: 90px; width: 100%; }
+        .bottom-ad { height: 90px; width: 100%; }
 
-        .ad-space::before {
-            content: 'Sponsored Ad Space';
-            font-weight: 500;
-            opacity: 0.6;
-        }
+        footer { background: rgba(15, 23, 42, 0.8); border-top: 1px solid var(--panel-border); color: var(--text-muted); text-align: center; padding: 25px; font-size: 0.9rem; }
+        footer a { color: #fff; text-decoration: none; margin: 0 10px; }
 
-        .sidebar-ad {
-            height: 180px;
-            margin-top: auto;
-        }
-
-        .bottom-ad {
-            height: 90px;
-            margin-top: 30px;
-            width: 100%;
-        }
-
-        /* Flex Layout Utilities */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        @media(max-width: 900px) { .clock-grid, .tool-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media(max-width: 600px) { .grid, .clock-grid, .tool-grid { grid-template-columns: 1fr; } header h1 { font-size: 1.75rem; } }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR NAVIGATION -->
-    <nav class="sidebar">
-        <div class="logo-area">
-            <i class="fa-solid fa-cubes-stacked"></i>
-            <span>SmartHub Tools</span>
+    <header>
+        <h1>Free Time Zone Calculator</h1>
+        <p>Convert time between 100+ major cities worldwide and calculate time differences.</p>
+    </header>
+
+    <div class="container">
+        <!-- Top Ad Space -->
+        <div class="ad-space top-ad"></div>
+
+        <!-- WORLD CLOCK -->
+        <div class="card">
+            <h2><i class="fa-solid fa-earth-americas"></i> World Clock</h2>
+            <p style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem;">Live standard time across core international operational nodes.</p>
+            <div class="clock-grid" id="worldClock"></div>
         </div>
-        <ul class="nav-menu">
-            <li class="nav-item active" onclick="switchTab('age-calc')"><i class="fa-solid fa-cake-candles"></i> Age Calculator</li>
-            <li class="nav-item" onclick="switchTab('avg-calc')"><i class="fa-solid fa-calculator"></i> Average Calculator</li>
-            <li class="nav-item" onclick="switchTab('bmi-calc')"><i class="fa-solid fa-heart-pulse"></i> BMI Calculator</li>
-            <li class="nav-item" onclick="switchTab('case-conv')"><i class="fa-solid fa-font"></i> Case Converter</li>
-            <li class="nav-item" onclick="switchTab('char-count')"><i class="fa-solid fa-arrow-left-right-to-line"></i> Character Counter</li>
-            <li class="nav-item" onclick="switchTab('compound-int')"><i class="fa-solid fa-percent"></i> Compound Interest</li>
-            <li class="nav-item" onclick="switchTab('countdown')"><i class="fa-solid fa-hourglass-start"></i> Countdown Timer</li>
-            <li class="nav-item" onclick="switchTab('data-conv')"><i class="fa-solid fa-database"></i> Data Converter</li>
-            <li class="nav-item" onclick="switchTab('date-diff')"><i class="fa-solid fa-calendar-days"></i> Date Difference</li>
-            <li class="nav-item" onclick="switchTab('discount-calc')"><i class="fa-solid fa-tags"></i> Discount Calculator</li>
-        </ul>
-        <!-- Sidebar Ad Slot Placeholder -->
-        <div class="ad-space sidebar-ad"></div>
-    </nav>
 
-    <!-- MAIN DASHBOARD CONTENT AREA -->
-    <main class="main-content">
-        
-        <!-- 1. AGE CALCULATOR -->
-        <section id="age-calc" class="tool-panel active">
-            <h2><i class="fa-solid fa-cake-candles"></i> Age Calculator</h2>
-            <div class="form-group">
-                <label>Enter Your Date of Birth</label>
-                <input type="date" id="dobInput">
+        <!-- TIME ZONE CONVERTER -->
+        <div class="card">
+            <h2><i class="fa-solid fa-timeline"></i> Time Zone Converter</h2>
+            <div class="grid">
+                <div><label>From</label><select id="fromZone"></select></div>
+                <div><label>To</label><select id="toZone"></select></div>
             </div>
-            <button class="btn" onclick="calculateAge()">Calculate Age</button>
-            <div class="result-box" id="ageResultBox" style="display:none;">
-                <div class="result-title">Your Exact Age</div>
-                <div class="result-value" id="ageOutput">-</div>
+            <div class="grid" style="margin-top:15px;">
+                <div><label>Date</label><input type="date" id="dateInput"></div>
+                <div><label>Time</label><input type="time" id="timeInput"></div>
             </div>
-        </section>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="convertTime()">Convert Time</button>
+                <button class="btn" style="background: rgba(255,255,255,0.1);" onclick="copyResult()">📋 Copy Result</button>
+            </div>
+            <div id="conversionResult" class="result">Select cities and enter a time coordinates to run conversion matrices.</div>
+        </div>
 
-        <!-- 2. AVERAGE CALCULATOR -->
-        <section id="avg-calc" class="tool-panel">
-            <h2><i class="fa-solid fa-calculator"></i> Average Calculator</h2>
-            <div class="form-group">
-                <label>Enter Numbers (separated by commas or spaces)</label>
-                <input type="text" id="avgInput" placeholder="e.g. 10, 20, 30, 40">
+        <!-- TIME DIFFERENCE -->
+        <div class="card">
+            <h2><i class="fa-solid fa-arrows-left-right"></i> Time Difference Calculator</h2>
+            <div class="grid">
+                <div><label>City 1</label><select id="differenceFrom"></select></div>
+                <div><label>City 2</label><select id="differenceTo"></select></div>
             </div>
-            <button class="btn" onclick="calculateAverage()">Calculate Average</button>
-            <div class="result-box" id="avgResultBox" style="display:none;">
-                <div class="result-title">Calculated Mean / Average</div>
-                <div class="result-value" id="avgOutput">-</div>
-            </div>
-        </section>
+            <button class="btn" onclick="calculateDifference()">Calculate Absolute Offset</button>
+            <div id="differenceResult" class="result">Select two cities to parse regional metric time variance.</div>
+        </div>
 
-        <!-- 3. BMI CALCULATOR -->
-        <section id="bmi-calc" class="tool-panel">
-            <h2><i class="fa-solid fa-heart-pulse"></i> BMI Calculator</h2>
-            <div class="grid-2">
-                <div class="form-group">
+        <!-- 25 ONLINE TOOLS HUB -->
+        <div class="card">
+            <h2><i class="fa-solid fa-cubes"></i> Free Integrated Online Tools</h2>
+            <div class="tool-grid">
+                <a class="tool" href="index.html"><i class="fa-solid fa-cake-candles"></i>Age Calculator</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-percent"></i>Percentage Calc</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-tags"></i>Discount Calculator</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-heart-pulse"></i>BMI Calculator</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-receipt"></i>GST & Sales Tax</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-scale-balanced"></i>Unit Converter</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-house-laptop"></i>Loan EMI Calculator</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-calendar-days"></i>Date Difference</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-hourglass-start"></i>Countdown Timer</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-briefcase"></i>Working Days</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-coins"></i>Simple Interest</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-chart-line"></i>Compound Interest</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-database"></i>Data Storage</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-file-word"></i>Word Counter</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-arrow-left-right-to-line"></i>Character Counter</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-font"></i>Case Converter</a>
+                <a class="tool" href="index.html"><i class="fa-solid fa-scissors"></i>Remove Spaces</a>
